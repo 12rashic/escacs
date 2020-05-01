@@ -8,13 +8,13 @@ pre-checks-deps: venv
 	venv/bin/pip install mypy
 
 pre-checks: pre-checks-deps
-	venv/bin/flake8 freddy --config=setup.cfg
+	venv/bin/flake8 escacs --config=setup.cfg
 	venv/bin/flake8 tests --config=setup.cfg
-	venv/bin/mypy freddy --ignore-missing-imports
+	venv/bin/mypy escacs --ignore-missing-imports
 	venv/bin/mypy tests --ignore-missing-imports
-	venv/bin/isort -c -rc freddy
+	venv/bin/isort -c -rc escacs
 	venv/bin/isort -c -rc tests
-	venv/bin/black --check --verbose freddy
+	venv/bin/black --check --verbose escacs
 	venv/bin/black --check --verbose tests
 
 develop: venv
