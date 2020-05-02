@@ -1,3 +1,3 @@
-class InvalidPosition(Exception):
+class InvalidSquare(Exception):
     def __init__(self, pos):
         self.pos = pos

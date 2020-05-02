@@ -1,20 +1,18 @@
 import unittest
 
 from escacs.pieces import Pawn
-from escacs.position import Position
+from escacs.square import Square
 
 
 class TestPawn(unittest.TestCase):
-    def _makeOne(self, pos: Position):
+    def _makeOne(self, pos: Square):
         p = Pawn(pos=pos, color="white")
-        return p.legal_moves()
+        return p.all_moves()
 
-    def test_legal_moves(self):
-        # TODO: make sure you can't have a white pawn on the 1st raw
-        # TODO: make sure you can't have a black pawn on the 8th raw
-        moves = self._makeOne(Position.from_string("a1"))
-        self.assertEqual(moves, {Position.from_string("a2"), Position.from_string("a")})
+    def test_all_moves(self):
+        moves = self._makeOne(Square.from_string("a2"))
+        self.assertEqual(moves, {Square.from_string("a3"), Square.from_string("a4")})
 
         # No more moves
-        moves = self._makeOne(Position.from_string("a8"))
+        moves = self._makeOne(Square.from_string("a8"))
         self.assertEqual(moves, set({}))

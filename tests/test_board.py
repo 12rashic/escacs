@@ -1,8 +1,8 @@
 import unittest
 
 import pytest
-from escacs.board import Board, Position
-from escacs.exceptions import InvalidPosition
+from escacs.board import Board, Square
+from escacs.exceptions import InvalidSquare
 
 
 class TestBoard(unittest.TestCase):
@@ -13,7 +13,7 @@ class TestBoard(unittest.TestCase):
         b = self._makeOne()
         for col in range(8):
             for row in range(8):
-                self.assertIsNone(b[Position(row, col)])
+                self.assertIsNone(b[Square(row, col)])
 
         for row in "abcdefgh":
             for col in range(1, 9):
@@ -27,17 +27,39 @@ class TestBoard(unittest.TestCase):
         self.assertIs(b["a1"], foo)
 
 
-class TestPosition_from_string(unittest.TestCase):
+class TestSquare_from_string(unittest.TestCase):
     def _makeOne(self, pos: str):
-        return Position.from_string(pos)
+        return Square.from_string(pos)
 
     def test_invalid_raises_exception(self):
         for invalid in ("c44", "x1", "", "a9"):
-            with pytest.raises(InvalidPosition):
+            with pytest.raises(InvalidSquare):
                 self._makeOne(invalid)
 
     def test_valid_returns_instance(self):
         for col in "abcdefgh":
             for row in range(1, 9):
                 valid = "".join([col, str(row)])
-                self.assertIsInstance(self._makeOne(valid), Position)
+                self.assertIsInstance(self._makeOne(valid), Square)
+
+
+class TestSquare_color(unittest.TestCase):
+    def _makeOne(self, pos: str):
+        p = Square.from_string(pos)
+        return p.color
+
+    def test_black_squares(self):
+        for col in "aceg":
+            for row in [1, 3, 5, 7]:
+                self.assertEqual(self._makeOne(f"{col}{row}"), "black")
+        for col in "bdfh":
+            for row in [2, 4, 6, 8]:
+                self.assertEqual(self._makeOne(f"{col}{row}"), "black")
+
+    def test_white_squares(self):
+        for col in "aceg":
+            for row in [2, 4, 6, 8]:
+                self.assertEqual(self._makeOne(f"{col}{row}"), "white")
+        for col in "bdfh":
+            for row in [1, 3, 5, 7]:
+                self.assertEqual(self._makeOne(f"{col}{row}"), "white")

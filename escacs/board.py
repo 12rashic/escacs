@@ -1,7 +1,7 @@
 from typing import Dict, Optional, Union
 
 from .pieces import Piece
-from .position import Position
+from .square import Square
 
 
 class Board:
@@ -16,12 +16,12 @@ class Board:
             for row in range(8):
                 self._board[col][row] = None
 
-    def __getitem__(self, pos: Union[str, Position]) -> Optional[Piece]:
+    def __getitem__(self, pos: Union[str, Square]) -> Optional[Piece]:
         if isinstance(pos, str):
-            pos = Position.from_string(pos)
+            pos = Square.from_string(pos)
         return self._board[pos.col][pos.col]
 
-    def __setitem__(self, pos: Union[str, Position], piece: Piece) -> None:
+    def __setitem__(self, pos: Union[str, Square], piece: Piece) -> None:
         if isinstance(pos, str):
-            pos = Position.from_string(pos)
+            pos = Square.from_string(pos)
         self._board[pos.col][pos.col] = piece
