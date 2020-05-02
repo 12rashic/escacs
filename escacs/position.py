@@ -45,4 +45,4 @@ class Position:
             row = range(1, 9)[self.row]
             return "".join([col, str(row)])
         except KeyError:
-            raise InvalidPosition(pos)
+            raise InvalidPosition((self.col, self.row))
