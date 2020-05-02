@@ -1,16 +1,17 @@
 from abc import ABCMeta, abstractmethod
-from types import Board, Color, Position
-from typing import List
+from typing import Set
+
+from .position import Position
+from .types import Color
 
 
 class Piece(metaclass=ABCMeta):
-    def __init__(self, board: Board, color: Color, pos: Position):
-        self.board = board
+    def __init__(self, color: Color, pos: Position):
         self.color = color
         self.pos = pos
 
     @abstractmethod
-    def legal_moves(self) -> List[Position]:
+    def legal_moves(self) -> Set[Position]:
         """Returns the complete list of legal moves given the current
         position.
 
@@ -27,23 +28,18 @@ class Piece(metaclass=ABCMeta):
     @abstractmethod
     def can_move(self) -> bool:
         """Returns whether the piece can move at all at current position.
-
         """
         ...
 
     def move(self, pos: Position):
         self.pos = pos
 
-    def row(self):
-        return self.pos.row
-
-    def column(self):
-        return self.pos.column
-
 
 class Pawn(Piece):
-    def legal_moves(self) -> List[Position]:
-        return [Position(0, 1)]
+    def legal_moves(self) -> Set[Position]:
+        if self.pos.row == 8:
+            return set({})
+        return {Position(col=self.pos.col, row=self.pos.row + 1)}
 
     def legal_move(self, pos: Position) -> bool:
         return True
