@@ -10,9 +10,9 @@ class TestPawn(unittest.TestCase):
         return p.all_moves()
 
     def test_all_moves(self):
-        moves = self._makeOne(Square.from_string("a2"))
-        self.assertEqual(moves, {Square.from_string("a3"), Square.from_string("a4")})
+        moves = self._makeOne(Square("a2"))
+        self.assertEqual(moves, {Square("a3"), Square("a4")})
 
         # No more moves
-        moves = self._makeOne(Square.from_string("a8"))
+        moves = self._makeOne(Square("a8"))
         self.assertEqual(moves, set({}))

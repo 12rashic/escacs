@@ -18,10 +18,10 @@ class Board:
 
     def __getitem__(self, pos: Union[str, Square]) -> Optional[Piece]:
         if isinstance(pos, str):
-            pos = Square.from_string(pos)
+            pos = Square(pos)
         return self._board[pos.col][pos.col]
 
     def __setitem__(self, pos: Union[str, Square], piece: Piece) -> None:
         if isinstance(pos, str):
-            pos = Square.from_string(pos)
+            pos = Square(pos)
         self._board[pos.col][pos.col] = piece

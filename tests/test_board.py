@@ -13,7 +13,7 @@ class TestBoard(unittest.TestCase):
         b = self._makeOne()
         for col in range(8):
             for row in range(8):
-                self.assertIsNone(b[Square(row, col)])
+                self.assertIsNone(b[Square((row, col))])
 
         for row in "abcdefgh":
             for col in range(1, 9):
@@ -29,7 +29,7 @@ class TestBoard(unittest.TestCase):
 
 class TestSquare_from_string(unittest.TestCase):
     def _makeOne(self, pos: str):
-        return Square.from_string(pos)
+        return Square(pos)
 
     def test_invalid_raises_exception(self):
         for invalid in ("c44", "x1", "", "a9"):
@@ -45,7 +45,7 @@ class TestSquare_from_string(unittest.TestCase):
 
 class TestSquare_color(unittest.TestCase):
     def _makeOne(self, pos: str):
-        p = Square.from_string(pos)
+        p = Square(pos)
         return p.color
 
     def test_black_squares(self):
