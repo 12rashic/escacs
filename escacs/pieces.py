@@ -21,6 +21,9 @@ class Piece(metaclass=ABCMeta):
         """
         ...
 
+    def _in_board(self, col, row) -> bool:
+        return col in range(8) and row in range(8)
+
     def move(self, pos: Square):
         self.pos = pos
 
@@ -43,7 +46,28 @@ class Pawn(Piece):
         for side in (-1, 0, 1):
             row = self.pos.row + self.direction
             col = self.pos.col + side
-            if row in range(8) and col in range(8):
+            if self._in_board(col, row):
                 moves.update({Square(col=col, row=row)})
 
+        return moves
+
+
+class Rook(Piece):
+    def all_moves(self) -> Set[Square]:
+        moves = set({})
+        for vector in ([0, 1], [0, -1], [1, 0], [-1, 1]):
+            x, y = vector
+            factor = 1
+            while True:
+                col = self.pos.col
+                row = self.pos.row
+                if x != 0:
+                    col += x * factor
+                if y != 0:
+                    row += y * factor
+                factor = factor + 1
+                if not self._in_board(col, row):
+                    break
+                else:
+                    moves.update({Square(col=col, row=row)})
         return moves
