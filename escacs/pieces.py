@@ -26,8 +26,24 @@ class Piece(metaclass=ABCMeta):
 
 
 class Pawn(Piece):
+    def init(self):
+        self.direction = 1 if self.color == "white" else -1
+        self.start_row = 1 if self.color == "white" else 6
+
     def all_moves(self) -> Set[Square]:
-        if self.color == "white":
-            if self.pos.row == 8:
-                return set({})
-            return {Square(col=self.pos.col, row=self.pos.row + 1)}
+        moves = set({})
+
+        # On starting position, pawn can jump 2 squares
+        if self.pos.row == self.start_row:
+            col = self.pos.col
+            row = self.pos.row + (self.direction * 2)
+            moves.update({Square(col=col, row=row)})
+
+        # Moving one square ahead + capturing moves
+        for side in (-1, 0, 1):
+            row = self.pos.row + self.direction
+            col = self.pos.col + side
+            if row in range(8) and col in range(8):
+                moves.update({Square(col=col, row=row)})
+
+        return moves
