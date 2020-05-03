@@ -1,6 +1,6 @@
 import unittest
 
-from escacs.pieces import Pawn
+from escacs.pieces import Bishop, Pawn, Queen, Rook
 from escacs.square import Square
 
 
@@ -82,3 +82,102 @@ class TestPawn(unittest.TestCase):
             self._makeOne(Square("h5"), color="black"), {Square("h4"), Square("g4")}
         )
         self.assertEqual(self._makeOne(Square("h1"), color="black"), set({}))
+
+
+def all_squares():
+    for i in range(8):
+        for j in range(8):
+            yield Square([i, j])
+
+
+class TestRook(unittest.TestCase):
+    def _makeOne(self, pos: Square, color="white"):
+        p = Rook(pos=pos, color=color)
+        return p.all_moves()
+
+    def test_horizontal_and_vertical(self):
+        for square in all_squares():
+            self.assertEqual(len(self._makeOne(square)), 14)
+
+        # Check that it always stays inthe same row or in the same
+        # column
+        for m in self._makeOne(Square("a1")):
+            self.assertTrue(
+                (m.col == 0 and m.row in range(8)) or (m.col in range(8) and m.row == 0)
+            )
+
+        for m in self._makeOne(Square("a5")):
+            self.assertTrue(
+                (m.col == 0 and m.row in range(8)) or (m.col in range(8) and m.row == 4)
+            )
+
+
+class TestBishop(unittest.TestCase):
+    def _makeOne(self, pos: Square, color="white"):
+        b = Bishop(pos=pos, color=color)
+        return b.all_moves()
+
+    def test_diagonals(self):
+        for square in all_squares():
+            square_color = square.color
+            moves = self._makeOne(square)
+            for m in moves:
+                assert m.color == square_color
+
+        # From all the board perimeter squares, bishop has only 7
+        # possible moves
+        for i in range(0, 8):
+            self.assertEqual(len(self._makeOne(Square((0, i)))), 7)
+            self.assertEqual(len(self._makeOne(Square((i, 0)))), 7)
+            self.assertEqual(len(self._makeOne(Square((7, i)))), 7)
+            self.assertEqual(len(self._makeOne(Square((i, 7)))), 7)
+
+        # Thes the inner perimeter squares
+        for i in range(1, 7):
+            self.assertEqual(len(self._makeOne(Square((1, i)))), 9)
+            self.assertEqual(len(self._makeOne(Square((i, 1)))), 9)
+            self.assertEqual(len(self._makeOne(Square((6, i)))), 9)
+            self.assertEqual(len(self._makeOne(Square((i, 6)))), 9)
+
+        for i in range(2, 6):
+            self.assertEqual(len(self._makeOne(Square((2, i)))), 11)
+            self.assertEqual(len(self._makeOne(Square((i, 2)))), 11)
+            self.assertEqual(len(self._makeOne(Square((5, i)))), 11)
+            self.assertEqual(len(self._makeOne(Square((i, 5)))), 11)
+
+        for i in range(3, 5):
+            self.assertEqual(len(self._makeOne(Square((3, i)))), 13)
+            self.assertEqual(len(self._makeOne(Square((i, 3)))), 13)
+            self.assertEqual(len(self._makeOne(Square((4, i)))), 13)
+            self.assertEqual(len(self._makeOne(Square((i, 4)))), 13)
+
+
+class TestQueen(unittest.TestCase):
+    def _makeOne(self, pos: Square, color="white"):
+        q = Queen(pos=pos, color=color)
+        return q.all_moves()
+
+    def test_all_moves(self):
+        for i in range(0, 8):
+            self.assertEqual(len(self._makeOne(Square((0, i)))), 21)
+            self.assertEqual(len(self._makeOne(Square((i, 0)))), 21)
+            self.assertEqual(len(self._makeOne(Square((7, i)))), 21)
+            self.assertEqual(len(self._makeOne(Square((i, 7)))), 21)
+
+        for i in range(1, 7):
+            self.assertEqual(len(self._makeOne(Square((1, i)))), 23)
+            self.assertEqual(len(self._makeOne(Square((i, 1)))), 23)
+            self.assertEqual(len(self._makeOne(Square((6, i)))), 23)
+            self.assertEqual(len(self._makeOne(Square((i, 6)))), 23)
+
+        for i in range(2, 6):
+            self.assertEqual(len(self._makeOne(Square((2, i)))), 25)
+            self.assertEqual(len(self._makeOne(Square((i, 2)))), 25)
+            self.assertEqual(len(self._makeOne(Square((5, i)))), 25)
+            self.assertEqual(len(self._makeOne(Square((i, 5)))), 25)
+
+        for i in range(3, 5):
+            self.assertEqual(len(self._makeOne(Square((3, i)))), 27)
+            self.assertEqual(len(self._makeOne(Square((i, 3)))), 27)
+            self.assertEqual(len(self._makeOne(Square((4, i)))), 27)
+            self.assertEqual(len(self._makeOne(Square((i, 4)))), 27)

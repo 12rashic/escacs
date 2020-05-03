@@ -1,14 +1,17 @@
 from abc import ABCMeta, abstractmethod
-from typing import Set
+from typing import List, Optional, Set, Tuple
 
 from .square import Square
 from .types import Color
 
 
 class Piece(metaclass=ABCMeta):
+    vectors: Optional[List[Tuple[int, int]]] = None
+
     def __init__(self, color: Color, pos: Square):
         self.color = color
         self.pos = pos
+
         self.init()
 
     def init(self):
@@ -21,11 +24,36 @@ class Piece(metaclass=ABCMeta):
         """
         ...
 
+    def _all_moves(self) -> Set[Square]:
+        moves = set({})
+        for vector in self.vectors or []:
+            x, y = vector
+            factor = 1
+            while True:
+                col = self.pos.col
+                row = self.pos.row
+                if x != 0:
+                    col += x * factor
+                if y != 0:
+                    row += y * factor
+                factor = factor + 1
+                if not self._in_board(col, row):
+                    break
+                else:
+                    moves.update({Square(col=col, row=row)})
+        return moves
+
     def _in_board(self, col, row) -> bool:
         return col in range(8) and row in range(8)
 
     def move(self, pos: Square):
         self.pos = pos
+
+    def raw(self):
+        self.pos.raw
+
+    def col(self):
+        self.pos.col
 
 
 class Pawn(Piece):
@@ -52,22 +80,22 @@ class Pawn(Piece):
         return moves
 
 
-class Rook(Piece):
+class Bishop(Piece):
+    vectors = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+
     def all_moves(self) -> Set[Square]:
-        moves = set({})
-        for vector in ([0, 1], [0, -1], [1, 0], [-1, 1]):
-            x, y = vector
-            factor = 1
-            while True:
-                col = self.pos.col
-                row = self.pos.row
-                if x != 0:
-                    col += x * factor
-                if y != 0:
-                    row += y * factor
-                factor = factor + 1
-                if not self._in_board(col, row):
-                    break
-                else:
-                    moves.update({Square(col=col, row=row)})
-        return moves
+        return self._all_moves()
+
+
+class Rook(Piece):
+    vectors = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+
+    def all_moves(self) -> Set[Square]:
+        return self._all_moves()
+
+
+class Queen(Piece):
+    vectors = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]]
+
+    def all_moves(self) -> Set[Square]:
+        return self._all_moves()
