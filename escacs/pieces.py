@@ -80,6 +80,27 @@ class Pawn(Piece):
         return moves
 
 
+class Knight(Piece):
+    def all_moves(self) -> Set[Square]:
+        moves = set({})
+        for (x, y) in [
+            [1, 2],
+            [1, -2],
+            [2, 1],
+            [2, -1],
+            [-1, 2],
+            [-1, -2],
+            [-2, 1],
+            [-2, -1],
+        ]:
+            col = self.pos.col + x
+            row = self.pos.row + y
+            if not self._in_board(col, row):
+                continue
+            moves.update({Square(col=col, row=row)})
+        return moves
+
+
 class Bishop(Piece):
     vectors = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
 
