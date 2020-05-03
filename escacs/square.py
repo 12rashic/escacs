@@ -1,7 +1,6 @@
 from typing import Optional, Tuple, Union
 
 from .exceptions import InvalidSquare
-from .types import Color
 
 
 class Square:
@@ -38,7 +37,7 @@ class Square:
         return hash(repr(self))
 
     @property
-    def color(self) -> Color:
+    def color(self) -> str:
         if (self.row + self.col) % 2 == 0:
             return "black"
         return "white"

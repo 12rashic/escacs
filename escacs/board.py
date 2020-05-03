@@ -10,7 +10,7 @@ class Board:
     """
 
     def __init__(self):
-        self._board: Dict[int : Dict[int, Optional[Piece]]] = {}
+        self._board: Dict[int, Dict[int, Optional[Piece]]] = {}
         for col in range(8):
             self._board[col] = {}
             for row in range(8):

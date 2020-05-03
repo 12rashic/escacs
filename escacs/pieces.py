@@ -102,21 +102,21 @@ class Knight(Piece):
 
 
 class Bishop(Piece):
-    _vectors = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+    _vectors = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 
     def all_moves(self) -> Set[Square]:
         return self._all_moves()
 
 
 class Rook(Piece):
-    _vectors = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+    _vectors = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
     def all_moves(self) -> Set[Square]:
         return self._all_moves()
 
 
 class Queen(Piece):
-    _vectors = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]]
+    _vectors = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
 
     def all_moves(self) -> Set[Square]:
         return self._all_moves()
