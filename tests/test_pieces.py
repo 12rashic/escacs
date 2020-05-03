@@ -1,6 +1,6 @@
 import unittest
 
-from escacs.pieces import Bishop, Knight, Pawn, Queen, Rook
+from escacs.pieces import Bishop, King, Knight, Pawn, Queen, Rook
 from escacs.square import Square
 
 
@@ -208,6 +208,34 @@ class TestKnight(unittest.TestCase):
                 Square("f6"),
                 Square("f4"),
                 Square("b6"),
+                Square("b4"),
+            },
+        )
+
+
+class TestKing(unittest.TestCase):
+    def _makeOne(self, pos: Square, color="white"):
+        k = King(pos=pos, color=color)
+        return k.all_moves()
+
+    def test_all_moves(self):
+        for s in all_squares():
+            self.assertIn(len(self._makeOne(s)), [3, 5, 8])
+
+        self.assertEqual(
+            self._makeOne(Square("a1")), {Square("a2"), Square("b2"), Square("b1")}
+        )
+
+        self.assertEqual(
+            self._makeOne(Square("c4")),
+            {
+                Square("c3"),
+                Square("b3"),
+                Square("d3"),
+                Square("c5"),
+                Square("b5"),
+                Square("d5"),
+                Square("d4"),
                 Square("b4"),
             },
         )

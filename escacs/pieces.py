@@ -6,7 +6,7 @@ from .types import Color
 
 
 class Piece(metaclass=ABCMeta):
-    vectors: Optional[List[Tuple[int, int]]] = None
+    _vectors: Optional[List[Tuple[int, int]]] = None
 
     def __init__(self, color: Color, pos: Square):
         self.color = color
@@ -26,7 +26,7 @@ class Piece(metaclass=ABCMeta):
 
     def _all_moves(self) -> Set[Square]:
         moves = set({})
-        for vector in self.vectors or []:
+        for vector in self._vectors or []:
             x, y = vector
             factor = 1
             while True:
@@ -102,21 +102,42 @@ class Knight(Piece):
 
 
 class Bishop(Piece):
-    vectors = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+    _vectors = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
 
     def all_moves(self) -> Set[Square]:
         return self._all_moves()
 
 
 class Rook(Piece):
-    vectors = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+    _vectors = [[0, 1], [0, -1], [1, 0], [-1, 0]]
 
     def all_moves(self) -> Set[Square]:
         return self._all_moves()
 
 
 class Queen(Piece):
-    vectors = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]]
+    _vectors = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]]
 
     def all_moves(self) -> Set[Square]:
         return self._all_moves()
+
+
+class King(Piece):
+    def all_moves(self) -> Set[Square]:
+        moves = set({})
+        for (x, y) in [
+            [1, 0],
+            [1, 1],
+            [1, -1],
+            [0, -1],
+            [0, 1],
+            [-1, 0],
+            [-1, 1],
+            [-1, -1],
+        ]:
+            col = self.pos.col + x
+            row = self.pos.row + y
+            if not self._in_board(col, row):
+                continue
+            moves.update({Square(col=col, row=row)})
+        return moves
