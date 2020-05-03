@@ -4,6 +4,11 @@ from .exceptions import InvalidSquare
 
 
 class Square:
+    """This represents a board square. Translates from matrix coordinates
+    to chess notation.
+
+    """
+
     row: int
     col: int
 

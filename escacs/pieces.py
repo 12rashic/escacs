@@ -6,21 +6,29 @@ from .types import Color
 
 
 class Piece(metaclass=ABCMeta):
+    """
+    Meta-class that encapsulates all comon piece logic
+    """
+
+    # Used to compute all possible moves per piece
     _vectors: Optional[List[Tuple[int, int]]] = None
 
     def __init__(self, color: Color, pos: Square):
         self.color = color
         self.pos = pos
-
         self.init()
 
     def init(self):
         pass
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.pos})"
+
     @abstractmethod
     def all_moves(self) -> Set[Square]:
-        """Returns all possible moves of the piece given the current square
-        (this includes ilegal moves too)
+        """Returns all possible squares of the piece given the current
+        position (this includes ilegal moves too)
+
         """
         ...
 
