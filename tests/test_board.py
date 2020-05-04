@@ -26,6 +26,11 @@ class TestBoard(unittest.TestCase):
         b["a1"] = foo
         self.assertIs(b["a1"], foo)
 
+    def test_init_board(self):
+        b = self._makeOne()
+        # TODO
+        pass
+
 
 class TestSquare_from_string(unittest.TestCase):
     def _makeOne(self, pos: str):
