@@ -1,8 +1,8 @@
-from typing import Optional
+from typing import List, Optional, Set, Tuple
 
 from .board import Board
 from .exceptions import InvalidMove
-from .pieces import *
+from .pieces import Piece
 from .square import Square
 from .types import Color
 
