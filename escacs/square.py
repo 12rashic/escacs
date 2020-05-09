@@ -4,13 +4,9 @@ from .exceptions import InvalidSquare
 
 
 class Square:
-    """This represents a board square. Translates from matrix coordinates
-    to chess notation.
-
+    """This represents a board square. Translates from/to matrix
+    coordinates and chess notation.
     """
-
-    row: int
-    col: int
 
     def __init__(
         self,
@@ -26,7 +22,6 @@ class Square:
         else:
             col = col or 0
             row = row or 0
-
         if row not in range(8) or col not in range(8):
             raise InvalidSquare((row, col))
         self.row = row

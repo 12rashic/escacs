@@ -12,7 +12,7 @@ class Piece(metaclass=ABCMeta):
 
     # Used to compute all possible moves per piece
     _vectors: Optional[List[Tuple[int, int]]] = None
-    abbriviation: str = " "
+    abbriviation: str = ""
 
     def __init__(self, color: Color):
         self.color = color
