@@ -1,24 +1,28 @@
+"""
+isort:skip_file
+"""
 import os
 from typing import Optional, Tuple
 
 from escacs.board import Board
-from escacs.exceptions import InvalidMove, InvalidSquare
+from escacs.exceptions import CheckMate, Draw, InvalidMove, InvalidSquare, Stalemate
 from escacs.pieces import Piece
 from escacs.square import Square
+from escacs.types import Color
 
 UNICODE_PIECES = {
-    "r": u"♜",
-    "n": u"♞",
-    "b": u"♝",
-    "q": u"♛",
-    "k": u"♚",
-    "p": u"♟",
-    "R": u"♖",
-    "N": u"♘",
-    "B": u"♗",
-    "Q": u"♕",
-    "K": u"♔",
-    "P": u"♙",
+    "r": "♜",
+    "n": "♞",
+    "b": "♝",
+    "q": "♛",
+    "k": "♚",
+    "p": "♟",
+    "R": "♖",
+    "N": "♘",
+    "B": "♗",
+    "Q": "♕",
+    "K": "♔",
+    "P": "♙",
     None: " ",
 }
 
@@ -29,7 +33,7 @@ class BoardConsoleGUI:
 
     def move(self):
         os.system("clear")
-        self.unicode_print()
+        self.print_board()
         _from, _to = self.get_move()
         self.board.move(_from, _to)
 
@@ -44,7 +48,7 @@ class BoardConsoleGUI:
             print("Invalid move! Try again...")
             return self.get_move()
 
-    def unicode_print(self) -> None:
+    def print_board(self) -> None:
         tmp = [" ", "a", "b", "c", "d", "e", "f", "g", "h"]
         print(" ".join(tmp))
         for row in reversed(range(8)):
@@ -70,14 +74,28 @@ def run(board: Board):
         gui = BoardConsoleGUI(board)
         while True:
             gui.move()
+    except CheckMate as cm:
+        print(f"{cm.color} won!")
+    except Resign as r:
+        print(f"{r.color} resigned")
+    except Draw:
+        print(f"Game ended in draw! 1/2")
+    except Stalemate:
+        print("Stalemate! 1/2")
     except (KeyboardInterrupt, EOFError):
+        pass
+    finally:
         print("Bye!")
-        os.system("clear")
         exit()
 
 
 class InvalidGUIMove(Exception):
     ...
+
+
+class Resign(Exception):
+    def __init__(self, color: Color):
+        self.color = color
 
 
 if __name__ == "__main__":
