@@ -1,8 +1,9 @@
 import os
-from typing import Tuple
+from typing import Optional, Tuple
 
 from escacs.board import Board
-from escacs.exceptions import InvalidSquare
+from escacs.exceptions import InvalidMove, InvalidSquare
+from escacs.pieces import Piece
 from escacs.square import Square
 
 UNICODE_PIECES = {
@@ -36,12 +37,10 @@ class BoardConsoleGUI:
         move = input(">>> ")
         if move == "exit":
             raise KeyboardInterrupt
-        if len(move) != 4:
-            print("Invalid move! Try again...")
-            return self.get_move()
         try:
+            assert len(move) == 4
             return Square(move[:2]), Square(move[2:])
-        except InvalidSquare:
+        except (AssertionError, InvalidSquare, InvalidMove):
             print("Invalid move! Try again...")
             return self.get_move()
 
