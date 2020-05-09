@@ -1,5 +1,6 @@
 from typing import Dict, Optional, Union
 
+from .exceptions import PieceNotFound
 from .pieces import Bishop, King, Knight, Pawn, Piece, Queen, Rook
 from .square import Square
 
@@ -30,10 +31,11 @@ class BaseBoard:
         self._board[pos] = piece
 
     def move(self, _from: Union[str, Square], _to: Union[str, Square]):
-        """Moves whatever piece is found in _from to _to positions. If no
+        """Moves whichever piece is found in _from to _to positions. If no
         piece found, nothing is done.
 
-        This does not check against valid chess moves.
+        It does not check against valid chess moves.
+
         """
         if isinstance(_from, str):
             _from = Square(_from)
@@ -43,6 +45,7 @@ class BaseBoard:
         if not piece:
             # No piece found
             return
+
         self[_from] = None
         self[_to] = piece
 
@@ -72,3 +75,11 @@ class Board(BaseBoard):
         self["d8"] = Queen("black")
         self["e1"] = King("white")
         self["e8"] = King("black")
+
+    def get_square(self, piece: Piece) -> Square:
+        for square, p in self._board.items():
+            if not p:
+                continue
+            if p == piece:
+                return square
+        raise PieceNotFound(piece)

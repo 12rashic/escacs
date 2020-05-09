@@ -3,7 +3,7 @@ class InvalidSquare(Exception):
         self.pos = pos
 
 
-class NoPieceFound(Exception):
+class PieceNotFound(Exception):
     def __init__(self, _from):
         self._from = _from
 
