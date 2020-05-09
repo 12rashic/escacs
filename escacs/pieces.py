@@ -12,6 +12,7 @@ class Piece(metaclass=ABCMeta):
 
     # Used to compute all possible moves per piece
     _vectors: Optional[List[Tuple[int, int]]] = None
+    abbriviation: str = " "
 
     def __init__(self, color: Color):
         self.color = color
@@ -58,6 +59,8 @@ class Piece(metaclass=ABCMeta):
 
 
 class Pawn(Piece):
+    abbriviation = "P"
+
     def init(self):
         self.direction = 1 if self.color == "white" else -1
         self.start_row = 1 if self.color == "white" else 6
@@ -82,6 +85,8 @@ class Pawn(Piece):
 
 
 class Knight(Piece):
+    abbriviation = "N"
+
     def all_moves(self, pos: Square) -> Set[Square]:
         moves = set({})
         for (x, y) in [
@@ -103,6 +108,8 @@ class Knight(Piece):
 
 
 class Bishop(Piece):
+    abbriviation = "B"
+
     _vectors = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
@@ -110,6 +117,8 @@ class Bishop(Piece):
 
 
 class Rook(Piece):
+    abbriviation = "R"
+
     _vectors = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
@@ -117,6 +126,8 @@ class Rook(Piece):
 
 
 class Queen(Piece):
+    abbriviation = "Q"
+
     _vectors = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
@@ -124,6 +135,8 @@ class Queen(Piece):
 
 
 class King(Piece):
+    abbriviation = "K"
+
     def all_moves(self, pos: Square) -> Set[Square]:
         moves = set({})
         for (x, y) in [

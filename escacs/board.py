@@ -26,7 +26,24 @@ class Board:
             pos = Square(pos)
         self._board[pos.col][pos.col] = piece
 
-    def init_board(self):
+    def move(self, _from: Union[str, Square], _to: Union[str, Square]):
+        """Moves whatever piece is found in _from to _to positions. If no
+        piece found, nothing is done.
+
+        This does not check against valid chess moves.
+        """
+        if isinstance(_from, str):
+            _from = Square(_from)
+        if isinstance(_to, str):
+            _to = Square(_to)
+        piece: Optional[Piece] = self[_from]
+        if not piece:
+            # No piece found
+            return
+        self[_from] = None
+        self[_to] = piece
+
+    def initialize(self):
         # Pawns first
         for col in "abcdefgh":
             self[f"{col}2"] = Pawn("white")
