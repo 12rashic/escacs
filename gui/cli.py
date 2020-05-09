@@ -49,32 +49,21 @@ class BoardConsoleGUI:
         tmp = [" ", "a", "b", "c", "d", "e", "f", "g", "h"]
         print(" ".join(tmp))
         for row in reversed(range(8)):
-            print(row + 1),
+            rowprint = []
+            rowprint.append(str(row + 1))
             for col in range(8):
                 sq = Square(col=col, row=row)
                 piece: Optional[Piece] = self.board[sq]
-                abbr = piece.abbriviation
-                if piece.color == "black":
-                    abbr = abbr.lower()
-                print(UNICODE_PIECES[abbr]),
-            print(row + 1),
-            print()
-        tmp = ["a", "b", "c", "d", "e", "f", "g", "h"]
+                if piece is None:
+                    rowprint.append(" ")
+                else:
+                    abbr = piece.abbriviation
+                    if piece.color == "black":
+                        abbr = abbr.lower()
+                    rowprint.append(UNICODE_PIECES[abbr])
+            rowprint.append(str(row + 1))
+            print(" ".join(rowprint))
         print(" ".join(tmp))
-
-
-"""
-print "\n", ("%s's turn\n" % self.board.player_turn.capitalize()).center(28)
-        for number in self.board.axis_x[::-1]:
-            print " " + str(number) + " ",
-            for letter in self.board.axis_y:
-                piece = self.board[letter+str(number)]
-                if piece is not None:
-                    print UNICODE_PIECES[piece.abbriviation] + ' ',
-                else: print '  ',
-            print "\n"
-        print "    " + "  ".join(self.board.axis_y)
-"""
 
 
 def run(board: Board):
@@ -85,7 +74,7 @@ def run(board: Board):
     except (KeyboardInterrupt, EOFError):
         print("Bye!")
         os.system("clear")
-        exit(0)
+        exit()
 
 
 class InvalidGUIMove(Exception):
@@ -94,9 +83,10 @@ class InvalidGUIMove(Exception):
 
 if __name__ == "__main__":
     print("Welcome to escacs!")
-    print("=" * 20)
-    print("State a move (e.g. a3b4). 'exit' to leave")
-    input("Press any key to start playing")
+    print("=" * 18)
+    print()
+    print("State a move in coordinates notation (e.g. a3b4). 'exit' to leave")
+    input("Press any key to start playing...")
     board = Board()
     board.initialize()
     run(board)

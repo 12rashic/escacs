@@ -10,21 +10,24 @@ class Board:
     """
 
     def __init__(self):
+        self.clear()
+
+    def clear(self):
         self._board: Dict[int, Dict[int, Optional[Piece]]] = {}
         for col in range(8):
-            self._board[col] = {}
             for row in range(8):
-                self._board[col][row] = None
+                tmp = self._board.setdefault(col, {})
+                tmp[row] = None
 
     def __getitem__(self, pos: Union[str, Square]) -> Optional[Piece]:
         if isinstance(pos, str):
             pos = Square(pos)
-        return self._board[pos.col][pos.col]
+        return self._board[pos.col][pos.row]
 
     def __setitem__(self, pos: Union[str, Square], piece: Piece) -> None:
         if isinstance(pos, str):
             pos = Square(pos)
-        self._board[pos.col][pos.col] = piece
+        self._board[pos.col][pos.row] = piece
 
     def move(self, _from: Union[str, Square], _to: Union[str, Square]):
         """Moves whatever piece is found in _from to _to positions. If no
@@ -45,9 +48,9 @@ class Board:
 
     def initialize(self):
         # Pawns first
-        for col in "abcdefgh":
-            self[f"{col}2"] = Pawn("white")
-            self[f"{col}7"] = Pawn("black")
+        for col in range(8):
+            self[Square(col=col, row=1)] = Pawn("white")
+            self[Square(col=col, row=6)] = Pawn("black")
 
         # Rooks
         self["a1"] = Rook("white")
