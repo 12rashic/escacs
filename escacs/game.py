@@ -12,7 +12,6 @@ from escacs.pieces import Rook
 from escacs.square import Square
 from escacs.types import Color
 from escacs.types import Coordinate
-from typing import cast
 from typing import List
 from typing import Optional
 from typing import Tuple
@@ -74,9 +73,9 @@ class Game:
 
     def pass_turn(self) -> None:
         if self._turn == "white":
-            self._turn = cast(Color, "black")
+            self._turn = "black"  # type: ignore
         else:
-            self._turn = cast(Color, "white")
+            self._turn = "white"  # type: ignore
 
     def player_move(self, _from: Square, _to: Square) -> Optional[IPiece]:
         """Move a piece from a square to another one. Checks agains valid

@@ -75,8 +75,8 @@ class Piece(metaclass=ABCMeta):
         return col in range(8) and row in range(8)
 
     def move(self, pos: Coordinate) -> None:
-        pos: ISquare = get_square(pos)
-        self.pos = pos
+        _pos: ISquare = get_square(pos)
+        self.pos = _pos
 
     def is_legal_move(self, pos: Coordinate) -> bool:
         return True
