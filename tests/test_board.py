@@ -12,7 +12,6 @@ class TestBoard(unittest.TestCase):
 
     def test_empty(self):
         b = self._makeOne()
-        b.clear()
         for col in range(8):
             for row in range(8):
                 self.assertIsNone(b[Square((row, col))])
@@ -27,13 +26,6 @@ class TestBoard(unittest.TestCase):
         foo = "foo"
         b["a1"] = foo
         self.assertIs(b["a1"], foo)
-
-    def test_init_board(self):
-        b = self._makeOne()
-        self.assertEqual(b["a2"].__class__.__name__, "Pawn")
-        self.assertEqual(b["a2"].color, "white")
-        self.assertEqual(b["a7"].__class__.__name__, "Pawn")
-        self.assertEqual(b["a7"].color, "black")
 
 
 class TestSquare_from_string(unittest.TestCase):

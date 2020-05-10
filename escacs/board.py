@@ -15,7 +15,7 @@ Coordinate = Union[str, Square]
 
 
 @implementer(IBoard)
-class BaseBoard:
+class Board:
     """
     Stores the position of the pieces along the game.
     """
@@ -33,7 +33,7 @@ class BaseBoard:
             pos = Square(pos)
         return self._board[pos]
 
-    def __setitem__(self, pos: Coordinate, piece: IPiece) -> None:
+    def __setitem__(self, pos: Coordinate, piece: Optional[IPiece]) -> None:
         if isinstance(pos, str):
             pos = Square(pos)
         self._board[pos] = piece
@@ -80,12 +80,6 @@ class BaseBoard:
 
         self[_from] = None
         self[_to] = piece
-
-
-class Board(BaseBoard):
-    def __init__(self):
-        super().__init__()
-        self.initialize()
 
     def get_square(self, piece: IPiece) -> Square:
         for square, p in self._board.items():

@@ -1,3 +1,4 @@
+from escacs.board import Board
 from escacs.pieces import Bishop
 from escacs.pieces import King
 from escacs.pieces import Knight
@@ -11,7 +12,7 @@ import unittest
 
 class TestPawn(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        p = Pawn(color=color)
+        p = Pawn(color=color, board=Board())
         return p.all_moves(pos)
 
     def test_all_moves_white(self):
@@ -97,7 +98,7 @@ def all_squares():
 
 class TestRook(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        p = Rook(color=color)
+        p = Rook(color=color, board=Board)
         return p.all_moves(pos)
 
     def test_horizontal_and_vertical(self):
@@ -119,7 +120,7 @@ class TestRook(unittest.TestCase):
 
 class TestBishop(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        b = Bishop(color=color)
+        b = Bishop(color=color, board=Board)
         return b.all_moves(pos)
 
     def test_diagonals(self):
@@ -159,7 +160,7 @@ class TestBishop(unittest.TestCase):
 
 class TestQueen(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        q = Queen(color=color)
+        q = Queen(color=color, board=Board)
         return q.all_moves(pos)
 
     def test_all_moves(self):
@@ -190,7 +191,7 @@ class TestQueen(unittest.TestCase):
 
 class TestKnight(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        n = Knight(color=color)
+        n = Knight(color=color, board=Board)
         return n.all_moves(pos)
 
     def test_all_moves(self):
@@ -220,7 +221,7 @@ class TestKnight(unittest.TestCase):
 
 class TestKing(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        k = King(color=color)
+        k = King(color=color, board=Board)
         return k.all_moves(pos)
 
     def test_all_moves(self):

@@ -8,17 +8,19 @@ from typing import List
 from typing import Optional
 from typing import Set
 from typing import Tuple
-from zope.interfaces import implementer
+from zope.interface import implementer
 
 
 @implementer(IPiece)
 class Piece(metaclass=ABCMeta):
-    """
-    Meta-class that encapsulates all comon piece logic
+    """Meta-class that encapsulates all comon piece logic.
+
+    Keeps a pointer to the current board, to know the position of all
+    other pieces of the game.
     """
 
     # Used to compute all possible moves per piece
-    deltas: Optional[List[Tuple[int, int]]] = None
+    _deltas: Optional[List[Tuple[int, int]]] = None
     abbr: str = ""
 
     def __init__(self, color: Color, board: IBoard):
@@ -45,7 +47,7 @@ class Piece(metaclass=ABCMeta):
 
     def _all_moves(self, pos: Square) -> Set[Square]:
         moves = set({})
-        for vector in self.deltas or []:
+        for vector in self._deltas or []:
             x, y = vector
             factor = 1
             while True:
@@ -118,7 +120,7 @@ class Knight(Piece):
 class Bishop(Piece):
     abbr = "B"
 
-    deltas = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+    _deltas = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
         return self._all_moves(pos)
@@ -127,7 +129,7 @@ class Bishop(Piece):
 class Rook(Piece):
     abbr = "R"
 
-    deltas = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    _deltas = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
         return self._all_moves(pos)
@@ -135,7 +137,7 @@ class Rook(Piece):
 
 class Queen(Piece):
     abbr = "Q"
-    deltas = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+    _deltas = Rook._deltas + Bishop._deltas
 
     def all_moves(self, pos: Square) -> Set[Square]:
         return self._all_moves(pos)
