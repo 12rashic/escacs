@@ -46,19 +46,19 @@ class Board:
         """Returns the ordered list of squares that conform the shortest path
         between 2 board coordinates.
         """
-        _from: ISquare = get_square(_from)
-        _to: ISquare = get_square(_to)
+        src: ISquare = get_square(_from)
+        dst: ISquare = get_square(_to)
         path = []
-        while _from != _to:
-            if _to.row > _from.row:
-                _from.row += 1
-            elif _to.row < _from.row:
-                _from.row -= 1
-            if _to.col > _from.col:
-                _from.col += 1
-            elif _to.col < _from.col:
-                _from.col -= 1
-            path.append(copy(_from))
+        while src != dst:
+            if src.row > dst.row:
+                src.row += 1
+            elif dst.row < src.row:
+                src.row -= 1
+            if dst.col > src.col:
+                src.col += 1
+            elif dst.col < src.col:
+                src.col -= 1
+            path.append(copy(src))
         return path
 
     def move_piece(self, _from: Coordinate, _to: Coordinate):
@@ -68,16 +68,16 @@ class Board:
         It does not check against valid chess moves.
 
         """
-        _from: ISquare = get_square(_from)
-        _to: ISquare = get_square(_to)
-        piece: Optional[IPiece] = self[_from]
+        src: ISquare = get_square(_from)
+        dst: ISquare = get_square(_to)
+        piece: Optional[IPiece] = self[src]
         if not piece:
             # No piece found
             return
 
-        self[_from] = None
-        self[_to] = piece
-        piece.move(_to)
+        self[src] = None
+        self[dst] = piece
+        piece.move(dst)
 
     def get_square(self, piece: IPiece) -> Square:
         for square, p in self._board.items():
