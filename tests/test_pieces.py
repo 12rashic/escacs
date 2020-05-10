@@ -12,8 +12,8 @@ import unittest
 
 class TestPawn(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        p = Pawn(color=color, board=Board())
-        return p.all_moves(pos)
+        p = Pawn(color=color, board=Board(), pos=pos)
+        return p.all_moves()
 
     def test_all_moves_white(self):
         self.assertEqual(self._makeOne(Square("a1")), {Square("a2"), Square("b2")})
@@ -98,8 +98,8 @@ def all_squares():
 
 class TestRook(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        p = Rook(color=color, board=Board)
-        return p.all_moves(pos)
+        p = Rook(color=color, board=Board, pos=pos)
+        return p.all_moves()
 
     def test_horizontal_and_vertical(self):
         for square in all_squares():
@@ -120,8 +120,8 @@ class TestRook(unittest.TestCase):
 
 class TestBishop(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        b = Bishop(color=color, board=Board)
-        return b.all_moves(pos)
+        b = Bishop(color=color, board=Board, pos=pos)
+        return b.all_moves()
 
     def test_diagonals(self):
         for square in all_squares():
@@ -160,8 +160,8 @@ class TestBishop(unittest.TestCase):
 
 class TestQueen(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        q = Queen(color=color, board=Board)
-        return q.all_moves(pos)
+        q = Queen(color=color, board=Board, pos=pos)
+        return q.all_moves()
 
     def test_all_moves(self):
         for i in range(0, 8):
@@ -191,8 +191,8 @@ class TestQueen(unittest.TestCase):
 
 class TestKnight(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        n = Knight(color=color, board=Board)
-        return n.all_moves(pos)
+        n = Knight(color=color, board=Board, pos=pos)
+        return n.all_moves()
 
     def test_all_moves(self):
         for sq in ("a1", "a8", "h1", "h8"):
@@ -221,8 +221,8 @@ class TestKnight(unittest.TestCase):
 
 class TestKing(unittest.TestCase):
     def _makeOne(self, pos: Square, color="white"):
-        k = King(color=color, board=Board)
-        return k.all_moves(pos)
+        k = King(color=color, board=Board, pos=pos)
+        return k.all_moves()
 
     def test_all_moves(self):
         for s in all_squares():

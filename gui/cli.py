@@ -7,7 +7,6 @@ from escacs.exceptions import Stalemate
 from escacs.game import Game
 from escacs.interfaces import IGame
 from escacs.interfaces import IPiece
-from escacs.pieces import Piece
 from escacs.square import Square
 from escacs.types import Color
 from typing import Optional

@@ -4,8 +4,10 @@ from escacs.exceptions import InvalidMove
 from escacs.interfaces import IBoard
 from escacs.interfaces import IGame
 from escacs.interfaces import IPiece
+from escacs.pieces import *
 from escacs.square import Square
 from escacs.types import Color
+from escacs.types import Coordinate
 from typing import cast
 from typing import List
 from typing import Optional
@@ -23,27 +25,31 @@ class Game:
         self.moves: List[Tuple[Square, Square]] = []
         self.initialize_board()
 
+    def place_piece(self, piece_klas, color: Color, pos: Coordinate):
+        piece = piece_klas(color, board=self.board, pos=pos)
+        self.board.place_piece(pos, piece)
+
     def initialize_board(self):
         self.board: IBoard = Board()
-        for col in range(8):
-            self.board[Square(col=col, row=1)] = pieces.Pawn("white", self.board)
-            self.board[Square(col=col, row=6)] = pieces.Pawn("black", self.board)
-        self.board["a1"] = pieces.Rook("white", self.board)
-        self.board["h1"] = pieces.Rook("white", self.board)
-        self.board["a8"] = pieces.Rook("black", self.board)
-        self.board["h8"] = pieces.Rook("black", self.board)
-        self.board["b1"] = pieces.Knight("white", self.board)
-        self.board["g1"] = pieces.Knight("white", self.board)
-        self.board["b8"] = pieces.Knight("black", self.board)
-        self.board["g8"] = pieces.Knight("black", self.board)
-        self.board["c1"] = pieces.Bishop("white", self.board)
-        self.board["f1"] = pieces.Bishop("white", self.board)
-        self.board["c8"] = pieces.Bishop("black", self.board)
-        self.board["f8"] = pieces.Bishop("black", self.board)
-        self.board["d1"] = pieces.Queen("white", self.board)
-        self.board["d8"] = pieces.Queen("black", self.board)
-        self.board["e1"] = pieces.King("white", self.board)
-        self.board["e8"] = pieces.King("black", self.board)
+        for col in "abcdefgh":
+            self.place_piece(Pawn, "white", f"{col}2")
+            self.place_piece(Pawn, "black", f"{col}7")
+        self.place_piece(Rook, "white", "a1")
+        self.place_piece(Rook, "white", "h1")
+        self.place_piece(Rook, "black", "a8")
+        self.place_piece(Rook, "black", "h8")
+        self.place_piece(Knight, "white", "b1")
+        self.place_piece(Knight, "white", "g1")
+        self.place_piece(Knight, "black", "b8")
+        self.place_piece(Knight, "black", "g8")
+        self.place_piece(Bishop, "white", "c1")
+        self.place_piece(Bishop, "white", "f1")
+        self.place_piece(Bishop, "black", "c8")
+        self.place_piece(Bishop, "black", "f8")
+        self.place_piece(Queen, "white", "d1")
+        self.place_piece(Queen, "black", "d8")
+        self.place_piece(King, "white", "e1")
+        self.place_piece(King, "black", "e8")
 
     @property
     def turn(self) -> Color:
@@ -71,8 +77,10 @@ class Game:
             raise InvalidMove(_from, _to)
 
         # Check that it's a valid piece move
-        all_moves = piece.all_moves(_from)
-        if _to not in all_moves:
+        if _to not in piece.all_moves():
+            raise InvalidMove(_from, _to)
+
+        if _to not in piece.is_legal_move(_to):
             raise InvalidMove(_from, _to)
 
         # TODO: Take into account moves where can take!

@@ -2,16 +2,15 @@ from copy import copy
 from escacs.exceptions import PieceNotFound
 from escacs.interfaces import IBoard
 from escacs.interfaces import IPiece
+from escacs.interfaces import ISquare
 from escacs.square import Square
+from escacs.types import Coordinate
 from typing import Dict
 from typing import List
 from typing import Optional
-from typing import Union
 from zope.interface import implementer
 
 _none = object()
-
-Coordinate = Union[str, Square]
 
 
 @implementer(IBoard)
@@ -24,7 +23,7 @@ class Board:
         self.clear()
 
     def clear(self):
-        self._board: Dict[Square, Optional[IPiece]] = {
+        self._board: Dict[ISquare, Optional[IPiece]] = {
             Square(col=col, row=row): None for col in range(8) for row in range(8)
         }
 
@@ -36,6 +35,8 @@ class Board:
     def __setitem__(self, pos: Coordinate, piece: Optional[IPiece]) -> None:
         if isinstance(pos, str):
             pos = Square(pos)
+        piece.board = self
+        piece.move(pos)
         self._board[pos] = piece
 
     get_piece = __getitem__
@@ -80,6 +81,7 @@ class Board:
 
         self[_from] = None
         self[_to] = piece
+        piece.move(_to)
 
     def get_square(self, piece: IPiece) -> Square:
         for square, p in self._board.items():

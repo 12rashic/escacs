@@ -1,6 +1,7 @@
 from escacs.board import Board
 from escacs.board import Square
 from escacs.exceptions import InvalidSquare
+from unittest.mock import Mock
 
 import pytest
 import unittest
@@ -23,7 +24,7 @@ class TestBoard(unittest.TestCase):
 
     def test_set_get_position(self):
         b = self._makeOne()
-        foo = "foo"
+        foo = Mock()
         b["a1"] = foo
         self.assertIs(b["a1"], foo)
 
