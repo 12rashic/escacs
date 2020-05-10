@@ -29,6 +29,19 @@ class Game:
         piece = piece_klas(color, board=self.board, pos=pos)
         self.board.place_piece(pos, piece)
 
+    def advantage(self, color: Color) -> int:
+        points = self.get_points(color)
+        opponent = "white" if color == "black" else "black"
+        opponent_points = self.get_points(opponent)
+        return points - opponent_points
+
+    def get_points(self, color: Color) -> int:
+        points = 0
+        for _, piece in self.board._board.items():
+            if piece and piece.color == color:
+                points += piece.points
+        return points
+
     def initialize_board(self):
         self.board: IBoard = Board()
         for col in "abcdefgh":
@@ -80,7 +93,7 @@ class Game:
         if _to not in piece.all_moves():
             raise InvalidMove(_from, _to)
 
-        if _to not in piece.is_legal_move(_to):
+        if not piece.is_legal_move(_to):
             raise InvalidMove(_from, _to)
 
         # TODO: Take into account moves where can take!

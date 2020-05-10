@@ -78,6 +78,9 @@ class Piece(metaclass=ABCMeta):
         pos: ISquare = get_square(pos)
         self.pos = pos
 
+    def is_legal_move(self, pos: Coordinate) -> bool:
+        return True
+
 
 class Pawn(Piece):
     abbr = "P"

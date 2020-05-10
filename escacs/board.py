@@ -5,6 +5,7 @@ from escacs.interfaces import IPiece
 from escacs.interfaces import ISquare
 from escacs.square import Square
 from escacs.types import Coordinate
+from escacs.utils import get_square
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -28,15 +29,14 @@ class Board:
         }
 
     def __getitem__(self, pos: Coordinate) -> Optional[IPiece]:
-        if isinstance(pos, str):
-            pos = Square(pos)
+        pos: ISquare = get_square(pos)
         return self._board[pos]
 
     def __setitem__(self, pos: Coordinate, piece: Optional[IPiece]) -> None:
-        if isinstance(pos, str):
-            pos = Square(pos)
-        piece.board = self
-        piece.move(pos)
+        pos: ISquare = get_square(pos)
+        if piece:
+            piece.board = self
+            piece.move(pos)
         self._board[pos] = piece
 
     get_piece = __getitem__
@@ -46,10 +46,8 @@ class Board:
         """Returns the ordered list of squares that conform the shortest path
         between 2 board coordinates.
         """
-        if isinstance(_from, str):
-            _from = Square(_from)
-        if isinstance(_to, str):
-            _to = Square(_to)
+        _from: ISquare = get_square(_from)
+        _to: ISquare = get_square(_to)
         path = []
         while _from != _to:
             if _to.row > _from.row:
@@ -70,10 +68,8 @@ class Board:
         It does not check against valid chess moves.
 
         """
-        if isinstance(_from, str):
-            _from = Square(_from)
-        if isinstance(_to, str):
-            _to = Square(_to)
+        _from: ISquare = get_square(_from)
+        _to: ISquare = get_square(_to)
         piece: Optional[IPiece] = self[_from]
         if not piece:
             # No piece found

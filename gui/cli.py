@@ -62,7 +62,9 @@ class ChessConsoleGUI:
     def print_board(self) -> None:
         board = self.game.board
         tmp = [" ", "a", "b", "c", "d", "e", "f", "g", "h"]
-        print(" ".join(tmp))
+        bpoints = self.game.advantage("black")
+        wpoints = self.game.advantage("white")
+        print(" ".join(tmp + [f"\tblack: {bpoints}"]))
         for row in reversed(range(8)):
             rowprint = []
             rowprint.append(str(row + 1))
@@ -78,7 +80,7 @@ class ChessConsoleGUI:
                     rowprint.append(UNICODE_PIECES[abbr])
             rowprint.append(str(row + 1))
             print(" ".join(rowprint))
-        print(" ".join(tmp))
+        print(" ".join(tmp + [f"\twhite: {wpoints}"]))
 
 
 def run(board: Board):
