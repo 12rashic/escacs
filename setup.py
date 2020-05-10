@@ -1,6 +1,6 @@
-import os
-
 from setuptools import setup
+
+import os
 
 _dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -26,6 +26,6 @@ setup(
     zip_safe=True,
     include_package_data=True,
     packages=["escacs"],
-    install_requires=[],
+    install_requires=["zope.interface"],
     extras_require={"test": ["pytest"]},
 )

@@ -1,6 +1,7 @@
-from typing import Optional, Tuple, Union
-
 from .exceptions import InvalidSquare
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 
 class Square:

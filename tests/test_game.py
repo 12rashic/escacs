@@ -1,9 +1,13 @@
-import unittest
+from escacs.board import Board
+from escacs.exceptions import InvalidMove
+from escacs.game import clear_path
+from escacs.game import Game
+from escacs.game import legal_moves
+from escacs.pieces import Pawn
+from escacs.square import Square
 
 import pytest
-from escacs.exceptions import InvalidMove
-from escacs.game import Game
-from escacs.square import Square
+import unittest
 
 
 class TestGame(unittest.TestCase):
@@ -46,3 +50,33 @@ class TestGame(unittest.TestCase):
         # Try to move white pawn diagonally like a bishop
         with pytest.raises(InvalidMove):
             g.move(Square("a2"), Square("d4"))
+
+
+class Test_clear_path(unittest.TestCase):
+    def makeOne(self, pos1, pos2, clear_at):
+        b = Board()
+        b.clear()
+        b[pos1] = Pawn("white")
+        b[pos2] = Pawn("white")
+        return clear_path(b, Pawn("white"))
+
+
+class Test_legal_moves_pawn(unittest.TestCase):
+    def makeOne(self, pos):
+        b = Board()
+        b.clear()
+        b[pos] = Pawn("white")
+        return b
+
+    def test_legal_moves(self):
+        sq = Square("a2")
+        board = self.makeOne(sq)
+        self.assertEquals(legal_moves(sq, board), {Square("a3"), Square("a4")})
+
+        sq = Square("a3")
+        board = self.makeOne(sq)
+        self.assertEquals(legal_moves(sq, board), {Square("a4")})
+
+        sq = Square("a8")
+        board = self.makeOne(sq)
+        self.assertEquals(legal_moves(sq, board), set())

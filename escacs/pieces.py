@@ -1,21 +1,29 @@
-from abc import ABCMeta, abstractmethod
-from typing import List, Optional, Set, Tuple
-
+from .interfaces import IBoard
+from .interfaces import IPiece
 from .square import Square
 from .types import Color
+from abc import ABCMeta
+from abc import abstractmethod
+from typing import List
+from typing import Optional
+from typing import Set
+from typing import Tuple
+from zope.interfaces import implementer
 
 
+@implementer(IPiece)
 class Piece(metaclass=ABCMeta):
     """
     Meta-class that encapsulates all comon piece logic
     """
 
     # Used to compute all possible moves per piece
-    _vectors: Optional[List[Tuple[int, int]]] = None
-    abbriviation: str = ""
+    deltas: Optional[List[Tuple[int, int]]] = None
+    abbr: str = ""
 
-    def __init__(self, color: Color):
+    def __init__(self, color: Color, board: IBoard):
         self.color = color
+        self.board = board
         self.init()
 
     def init(self):
@@ -37,7 +45,7 @@ class Piece(metaclass=ABCMeta):
 
     def _all_moves(self, pos: Square) -> Set[Square]:
         moves = set({})
-        for vector in self._vectors or []:
+        for vector in self.deltas or []:
             x, y = vector
             factor = 1
             while True:
@@ -59,7 +67,7 @@ class Piece(metaclass=ABCMeta):
 
 
 class Pawn(Piece):
-    abbriviation = "P"
+    abbr = "P"
 
     def init(self):
         self.direction = 1 if self.color == "white" else -1
@@ -85,7 +93,7 @@ class Pawn(Piece):
 
 
 class Knight(Piece):
-    abbriviation = "N"
+    abbr = "N"
 
     def all_moves(self, pos: Square) -> Set[Square]:
         moves = set({})
@@ -108,34 +116,33 @@ class Knight(Piece):
 
 
 class Bishop(Piece):
-    abbriviation = "B"
+    abbr = "B"
 
-    _vectors = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+    deltas = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
         return self._all_moves(pos)
 
 
 class Rook(Piece):
-    abbriviation = "R"
+    abbr = "R"
 
-    _vectors = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    deltas = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
         return self._all_moves(pos)
 
 
 class Queen(Piece):
-    abbriviation = "Q"
-
-    _vectors = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+    abbr = "Q"
+    deltas = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
         return self._all_moves(pos)
 
 
 class King(Piece):
-    abbriviation = "K"
+    abbr = "K"
 
     def all_moves(self, pos: Square) -> Set[Square]:
         moves = set({})

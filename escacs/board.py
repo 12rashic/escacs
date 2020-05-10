@@ -1,12 +1,20 @@
-from typing import Dict, Optional, Union
-
-from .exceptions import PieceNotFound
-from .pieces import Bishop, King, Knight, Pawn, Piece, Queen, Rook
-from .square import Square
+from copy import copy
+from escacs.exceptions import PieceNotFound
+from escacs.interfaces import IBoard
+from escacs.interfaces import IPiece
+from escacs.square import Square
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Union
+from zope.interface import implementer
 
 _none = object()
 
+Coordinate = Union[str, Square]
 
+
+@implementer(IBoard)
 class BaseBoard:
     """
     Stores the position of the pieces along the game.
@@ -16,21 +24,45 @@ class BaseBoard:
         self.clear()
 
     def clear(self):
-        self._board: Dict[Square, Optional[Piece]] = {
+        self._board: Dict[Square, Optional[IPiece]] = {
             Square(col=col, row=row): None for col in range(8) for row in range(8)
         }
 
-    def __getitem__(self, pos: Union[str, Square]) -> Optional[Piece]:
+    def __getitem__(self, pos: Coordinate) -> Optional[IPiece]:
         if isinstance(pos, str):
             pos = Square(pos)
         return self._board[pos]
 
-    def __setitem__(self, pos: Union[str, Square], piece: Piece) -> None:
+    def __setitem__(self, pos: Coordinate, piece: IPiece) -> None:
         if isinstance(pos, str):
             pos = Square(pos)
         self._board[pos] = piece
 
-    def move(self, _from: Union[str, Square], _to: Union[str, Square]):
+    get_piece = __getitem__
+    place_piece = __setitem__
+
+    def path(self, _from: Coordinate, _to: Coordinate) -> List[Square]:
+        """Returns the ordered list of squares that conform the shortest path
+        between 2 board coordinates.
+        """
+        if isinstance(_from, str):
+            _from = Square(_from)
+        if isinstance(_to, str):
+            _to = Square(_to)
+        path = []
+        while _from != _to:
+            if _to.row > _from.row:
+                _from.row += 1
+            elif _to.row < _from.row:
+                _from.row -= 1
+            if _to.col > _from.col:
+                _from.col += 1
+            elif _to.col < _from.col:
+                _from.col -= 1
+            path.append(copy(_from))
+        return path
+
+    def move_piece(self, _from: Coordinate, _to: Coordinate):
         """Moves whichever piece is found in _from to _to positions. If no
         piece found, nothing is done.
 
@@ -41,7 +73,7 @@ class BaseBoard:
             _from = Square(_from)
         if isinstance(_to, str):
             _to = Square(_to)
-        piece: Optional[Piece] = self[_from]
+        piece: Optional[IPiece] = self[_from]
         if not piece:
             # No piece found
             return
@@ -55,28 +87,7 @@ class Board(BaseBoard):
         super().__init__()
         self.initialize()
 
-    def initialize(self):
-        for col in range(8):
-            self[Square(col=col, row=1)] = Pawn("white")
-            self[Square(col=col, row=6)] = Pawn("black")
-        self["a1"] = Rook("white")
-        self["h1"] = Rook("white")
-        self["a8"] = Rook("black")
-        self["h8"] = Rook("black")
-        self["b1"] = Knight("white")
-        self["g1"] = Knight("white")
-        self["b8"] = Knight("black")
-        self["g8"] = Knight("black")
-        self["c1"] = Bishop("white")
-        self["f1"] = Bishop("white")
-        self["c8"] = Bishop("black")
-        self["f8"] = Bishop("black")
-        self["d1"] = Queen("white")
-        self["d8"] = Queen("black")
-        self["e1"] = King("white")
-        self["e8"] = King("black")
-
-    def get_square(self, piece: Piece) -> Square:
+    def get_square(self, piece: IPiece) -> Square:
         for square, p in self._board.items():
             if not p:
                 continue

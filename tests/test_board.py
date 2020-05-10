@@ -1,8 +1,9 @@
-import unittest
+from escacs.board import Board
+from escacs.board import Square
+from escacs.exceptions import InvalidSquare
 
 import pytest
-from escacs.board import Board, Square
-from escacs.exceptions import InvalidSquare
+import unittest
 
 
 class TestBoard(unittest.TestCase):
@@ -71,3 +72,45 @@ class TestSquare_color(unittest.TestCase):
         for col in "bdfh":
             for row in [1, 3, 5, 7]:
                 self.assertEqual(self._makeOne(f"{col}{row}"), "white")
+
+
+class TestSquare_path(unittest.TestCase):
+    def _makeOne(self, _from: str, _to: str):
+        b = Board()
+        return b.path(_from, _to)
+
+    def test_path_orthogonal(self):
+        expected = [
+            Square("a2"),
+            Square("a3"),
+            Square("a4"),
+            Square("a5"),
+            Square("a6"),
+            Square("a7"),
+            Square("a8"),
+        ]
+        self.assertEqual(self._makeOne("a1", "a2"), expected[:1])
+        self.assertEqual(self._makeOne("a1", "a3"), expected[:2])
+        self.assertEqual(self._makeOne("a1", "a4"), expected[:3])
+        self.assertEqual(self._makeOne("a1", "a5"), expected[:4])
+        self.assertEqual(self._makeOne("a1", "a6"), expected[:5])
+        self.assertEqual(self._makeOne("a1", "a7"), expected[:6])
+        self.assertEqual(self._makeOne("a1", "a8"), expected)
+        self.assertEqual(self._makeOne("a2", "a8"), expected[1:])
+
+    def test_path_diagonal(self):
+        expected = [
+            Square("b3"),
+            Square("c4"),
+            Square("d5"),
+            Square("e6"),
+            Square("f7"),
+            Square("g8"),
+        ]
+        self.assertEqual(self._makeOne("a2", "b3"), expected[:1])
+        self.assertEqual(self._makeOne("a2", "c4"), expected[:2])
+        self.assertEqual(self._makeOne("a2", "d5"), expected[:3])
+        self.assertEqual(self._makeOne("a2", "e6"), expected[:4])
+        self.assertEqual(self._makeOne("a2", "f7"), expected[:5])
+        self.assertEqual(self._makeOne("a2", "g8"), expected)
+        self.assertEqual(self._makeOne("c4", "e6"), expected[2:4])

@@ -1,7 +1,12 @@
-import unittest
-
-from escacs.pieces import Bishop, King, Knight, Pawn, Queen, Rook
+from escacs.pieces import Bishop
+from escacs.pieces import King
+from escacs.pieces import Knight
+from escacs.pieces import Pawn
+from escacs.pieces import Queen
+from escacs.pieces import Rook
 from escacs.square import Square
+
+import unittest
 
 
 class TestPawn(unittest.TestCase):

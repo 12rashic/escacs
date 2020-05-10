@@ -1,14 +1,16 @@
-"""
-isort:skip_file
-"""
-import os
-from typing import Optional, Tuple
-
 from escacs.board import Board
-from escacs.exceptions import CheckMate, Draw, InvalidMove, InvalidSquare, Stalemate
+from escacs.exceptions import CheckMate
+from escacs.exceptions import Draw
+from escacs.exceptions import InvalidMove
+from escacs.exceptions import InvalidSquare
+from escacs.exceptions import Stalemate
 from escacs.pieces import Piece
 from escacs.square import Square
 from escacs.types import Color
+from typing import Optional
+from typing import Tuple
+
+import os
 
 UNICODE_PIECES = {
     "r": "♜",
@@ -60,7 +62,7 @@ class BoardConsoleGUI:
                 if piece is None:
                     rowprint.append(" ")
                 else:
-                    abbr = piece.abbriviation
+                    abbr = piece.abbr
                     if piece.color == "black":
                         abbr = abbr.lower()
                     rowprint.append(UNICODE_PIECES[abbr])
