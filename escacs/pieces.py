@@ -22,6 +22,7 @@ class Piece(metaclass=ABCMeta):
     # Used to compute all possible moves per piece
     _deltas: Optional[List[Tuple[int, int]]] = None
     abbr: str = ""
+    points: int = 0
 
     def __init__(self, color: Color, board: IBoard):
         self.color = color
@@ -70,6 +71,7 @@ class Piece(metaclass=ABCMeta):
 
 class Pawn(Piece):
     abbr = "P"
+    points = 1
 
     def init(self):
         self.direction = 1 if self.color == "white" else -1
@@ -96,6 +98,7 @@ class Pawn(Piece):
 
 class Knight(Piece):
     abbr = "N"
+    points = 3
 
     def all_moves(self, pos: Square) -> Set[Square]:
         moves = set({})
@@ -119,7 +122,7 @@ class Knight(Piece):
 
 class Bishop(Piece):
     abbr = "B"
-
+    points = 3
     _deltas = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
@@ -128,7 +131,7 @@ class Bishop(Piece):
 
 class Rook(Piece):
     abbr = "R"
-
+    points = 5
     _deltas = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
     def all_moves(self, pos: Square) -> Set[Square]:
@@ -137,6 +140,7 @@ class Rook(Piece):
 
 class Queen(Piece):
     abbr = "Q"
+    points = 9
     _deltas = Rook._deltas + Bishop._deltas
 
     def all_moves(self, pos: Square) -> Set[Square]:
