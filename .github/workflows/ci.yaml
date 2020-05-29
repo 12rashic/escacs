@@ -25,10 +25,6 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        python-version: [3.8.2]
-
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -36,7 +32,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.8
 
       - name: Run tests
         run: |
