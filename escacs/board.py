@@ -50,14 +50,15 @@ class Board:
         dst: ISquare = get_square(_to)
         path = []
         while src != dst:
-            if src.row > dst.row:
-                src.row += 1
-            elif dst.row < src.row:
-                src.row -= 1
-            if dst.col > src.col:
-                src.col += 1
-            elif dst.col < src.col:
-                src.col -= 1
+            for attr in ("row", "col"):
+                srcx = getattr(src, attr)
+                dstx = getattr(dst, attr)
+                if srcx == dstx:
+                    continue
+                if srcx > dstx:
+                    setattr(src, attr, srcx - 1)
+                else:
+                    setattr(src, attr, srcx + 1)
             path.append(copy(src))
         return path
 
