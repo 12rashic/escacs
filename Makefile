@@ -39,3 +39,9 @@ snippets: develop
 	venv/bin/pip install ipython
 	venv/bin/pip install aiohttp
 	venv/bin/pip install pdbpp
+
+lint: pre-checks-deps
+	venv/bin/isort -rc escacs
+	venv/bin/isort -rc tests
+	venv/bin/black escacs
+	venv/bin/black tests

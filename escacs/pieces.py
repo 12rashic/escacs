@@ -1,8 +1,5 @@
 from abc import ABCMeta
 from abc import abstractmethod
-from escacs.interfaces import IBoard
-from escacs.interfaces import IPiece
-from escacs.interfaces import ISquare
 from escacs.square import Square
 from escacs.types import Color
 from escacs.types import Coordinate
@@ -11,10 +8,8 @@ from typing import List
 from typing import Optional
 from typing import Set
 from typing import Tuple
-from zope.interface import implementer
 
 
-@implementer(IPiece)
 class Piece(metaclass=ABCMeta):
     """Meta-class that encapsulates all comon piece logic.
 
@@ -29,10 +24,10 @@ class Piece(metaclass=ABCMeta):
     abbr: str = ""
     points: int = 0
 
-    def __init__(self, color: Color, board: IBoard, pos: Coordinate):
+    def __init__(self, color: Color, board, pos: Coordinate):
         self.color = color
         self.board = board
-        self.pos: ISquare = get_square(pos)
+        self.pos: Square = get_square(pos)
         self.init()
 
     def init(self):
@@ -45,14 +40,14 @@ class Piece(metaclass=ABCMeta):
         return kls_name
 
     @abstractmethod
-    def all_moves(self) -> Set[ISquare]:
+    def all_moves(self) -> Set[Square]:
         """Returns all possible squares of the piece given the current
         position (this includes ilegal moves too)
 
         """
         ...
 
-    def _all_moves(self) -> Set[ISquare]:
+    def _all_moves(self) -> Set[Square]:
         moves = set({})
         for vector in self._deltas or []:
             x, y = vector
@@ -75,7 +70,7 @@ class Piece(metaclass=ABCMeta):
         return col in range(8) and row in range(8)
 
     def move(self, pos: Coordinate) -> None:
-        _pos: ISquare = get_square(pos)
+        _pos: Square = get_square(pos)
         self.pos = _pos
 
     def is_legal_move(self, pos: Coordinate) -> bool:
@@ -90,7 +85,7 @@ class Pawn(Piece):
         self.direction = 1 if self.color == "white" else -1
         self.start_row = 1 if self.color == "white" else 6
 
-    def all_moves(self) -> Set[ISquare]:
+    def all_moves(self) -> Set[Square]:
         moves = set({})
 
         # On starting position, pawn can jump 2 squares
@@ -114,7 +109,7 @@ class Knight(Piece):
     abbr = "N"
     points = 3
 
-    def all_moves(self) -> Set[ISquare]:
+    def all_moves(self) -> Set[Square]:
         moves = set({})
         for (x, y) in [
             [1, 2],
@@ -139,7 +134,7 @@ class Bishop(Piece):
     points = 3
     _deltas = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 
-    def all_moves(self) -> Set[ISquare]:
+    def all_moves(self) -> Set[Square]:
         return self._all_moves()
 
 
@@ -148,7 +143,7 @@ class Rook(Piece):
     points = 5
     _deltas = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
-    def all_moves(self) -> Set[ISquare]:
+    def all_moves(self) -> Set[Square]:
         return self._all_moves()
 
 
@@ -157,14 +152,14 @@ class Queen(Piece):
     points = 9
     _deltas = Rook._deltas + Bishop._deltas
 
-    def all_moves(self) -> Set[ISquare]:
+    def all_moves(self) -> Set[Square]:
         return self._all_moves()
 
 
 class King(Piece):
     abbr = "K"
 
-    def all_moves(self) -> Set[ISquare]:
+    def all_moves(self) -> Set[Square]:
         moves = set({})
         for (x, y) in [
             [1, 0],

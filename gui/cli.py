@@ -5,8 +5,6 @@ from escacs.exceptions import InvalidMove
 from escacs.exceptions import InvalidSquare
 from escacs.exceptions import Stalemate
 from escacs.game import Game
-from escacs.interfaces import IGame
-from escacs.interfaces import IPiece
 from escacs.square import Square
 from escacs.types import Color
 from typing import Optional
@@ -32,7 +30,7 @@ UNICODE_PIECES = {
 
 
 class ChessConsoleGUI:
-    def __init__(self, game: IGame):
+    def __init__(self, game):
         self.game = game
 
     def move(self):

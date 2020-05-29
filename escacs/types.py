@@ -1,5 +1,5 @@
 from enum import Enum
-from escacs.interfaces import ISquare
+from escacs.square import Square
 from typing import Union
 
 
@@ -8,4 +8,4 @@ class Color(str, Enum):
     black = "black"
 
 
-Coordinate = Union[str, ISquare]
+Coordinate = Union[str, Square]

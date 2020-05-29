@@ -1,20 +1,16 @@
 from copy import copy
 from escacs.exceptions import PieceNotFound
-from escacs.interfaces import IBoard
-from escacs.interfaces import IPiece
-from escacs.interfaces import ISquare
+from escacs.pieces import Piece
 from escacs.square import Square
 from escacs.types import Coordinate
 from escacs.utils import get_square
 from typing import Dict
 from typing import List
 from typing import Optional
-from zope.interface import implementer
 
 _none = object()
 
 
-@implementer(IBoard)
 class Board:
     """
     Stores the position of the pieces along the game.
@@ -24,20 +20,19 @@ class Board:
         self.clear()
 
     def clear(self):
-        self._board: Dict[ISquare, Optional[IPiece]] = {
+        self._board: Dict[Square, Optional[Piece]] = {
             Square(col=col, row=row): None for col in range(8) for row in range(8)
         }
 
-    def __getitem__(self, pos: Coordinate) -> Optional[IPiece]:
-        pos: ISquare = get_square(pos)
-        return self._board[pos]
+    def __getitem__(self, pos: Coordinate) -> Optional[Piece]:
+        return self._board[get_square(pos)]
 
-    def __setitem__(self, pos: Coordinate, piece: Optional[IPiece]) -> None:
-        pos: ISquare = get_square(pos)
+    def __setitem__(self, pos: Coordinate, piece: Optional[Piece]) -> None:
+        sq = get_square(pos)
         if piece:
             piece.board = self
-            piece.move(pos)
-        self._board[pos] = piece
+            piece.move(sq)
+        self._board[sq] = piece
 
     get_piece = __getitem__
     place_piece = __setitem__
@@ -46,8 +41,8 @@ class Board:
         """Returns the ordered list of squares that conform the shortest path
         between 2 board coordinates.
         """
-        src: ISquare = get_square(_from)
-        dst: ISquare = get_square(_to)
+        src: Square = get_square(_from)
+        dst: Square = get_square(_to)
         path = []
         while src != dst:
             for attr in ("row", "col"):
@@ -69,9 +64,9 @@ class Board:
         It does not check against valid chess moves.
 
         """
-        src: ISquare = get_square(_from)
-        dst: ISquare = get_square(_to)
-        piece: Optional[IPiece] = self[src]
+        src: Square = get_square(_from)
+        dst: Square = get_square(_to)
+        piece: Optional[Piece] = self[src]
         if not piece:
             # No piece found
             return
@@ -80,7 +75,7 @@ class Board:
         self[dst] = piece
         piece.move(dst)
 
-    def get_square(self, piece: IPiece) -> Square:
+    def get_square(self, piece: Piece) -> Square:
         for square, p in self._board.items():
             if not p:
                 continue

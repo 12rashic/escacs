@@ -1,12 +1,10 @@
 from escacs.board import Board
 from escacs.exceptions import InvalidMove
-from escacs.interfaces import IBoard
-from escacs.interfaces import IGame
-from escacs.interfaces import IPiece
 from escacs.pieces import Bishop
 from escacs.pieces import King
 from escacs.pieces import Knight
 from escacs.pieces import Pawn
+from escacs.pieces import Piece
 from escacs.pieces import Queen
 from escacs.pieces import Rook
 from escacs.square import Square
@@ -15,10 +13,8 @@ from escacs.types import Coordinate
 from typing import List
 from typing import Optional
 from typing import Tuple
-from zope.interface import implementer
 
 
-@implementer(IGame)
 class Game:
     def __init__(self):
         self.start()
@@ -35,7 +31,7 @@ class Game:
     def advantage(self, color: Color) -> int:
         points = self.get_points(color)
         opponent = "white" if color == "black" else "black"
-        opponent_points = self.get_points(opponent)
+        opponent_points = self.get_points(opponent)  # type: ignore
         return points - opponent_points
 
     def get_points(self, color: Color) -> int:
@@ -46,7 +42,7 @@ class Game:
         return points
 
     def initialize_board(self):
-        self.board: IBoard = Board()
+        self.board: Board = Board()
         for col in "abcdefgh":
             self.place_piece(Pawn, "white", f"{col}2")
             self.place_piece(Pawn, "black", f"{col}7")
@@ -77,7 +73,7 @@ class Game:
         else:
             self._turn = "white"  # type: ignore
 
-    def player_move(self, _from: Square, _to: Square) -> Optional[IPiece]:
+    def player_move(self, _from: Square, _to: Square) -> Optional[Piece]:
         """Move a piece from a square to another one. Checks agains valid
         moves. Returns the eaten piece, if any.
 
@@ -104,7 +100,7 @@ class Game:
         # piece.
         # TODO: prevent moves that leave the king on check.
         # TODO: check for stalemate.
-        taken: Optional[IPiece] = self.board.move_piece(_from, _to)
+        taken: Optional[Piece] = self.board.move_piece(_from, _to)
         self.moves.append((_from, _to))
         self.pass_turn()
         return taken
