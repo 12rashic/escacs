@@ -14,7 +14,7 @@ make develop
 Then you can run the CLI GUI with
 
 ``` shell
-venv/bin/ipython gui/cli.py
+venv/bin/python gui/cli.py
 ```
 
 and play!
