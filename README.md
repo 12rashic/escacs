@@ -1,6 +1,6 @@
 # Escacs
 
-Library for chess fun
+Repo for chess fun
 
 ## Install
 
