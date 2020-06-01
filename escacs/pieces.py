@@ -24,7 +24,7 @@ class Piece(metaclass=ABCMeta):
     abbr: str = ""
     points: int = 0
 
-    def __init__(self, color: Color, board, pos: Coordinate):
+    def __init__(self, color: Color, pos: Optional[Coordinate] = None, board=None):
         self.color = color
         self.board = board
         self.pos: Square = get_square(pos)
@@ -70,11 +70,23 @@ class Piece(metaclass=ABCMeta):
         return col in range(8) and row in range(8)
 
     def move(self, pos: Coordinate) -> None:
+        """
+        Change the position of the piece
+        """
         _pos: Square = get_square(pos)
         self.pos = _pos
 
     def is_legal_move(self, pos: Coordinate) -> bool:
-        return True
+        """
+        Returns whether the new position is a legal move
+        """
+        return False
+
+    def all_legal_moves(self) -> Set[Square]:
+        """
+        Returns only legal moves!
+        """
+        return set()
 
 
 class Pawn(Piece):
@@ -103,6 +115,18 @@ class Pawn(Piece):
                 moves.update({Square(col=col, row=row)})
 
         return moves
+
+    def is_legal_move(self, pos: Coordinate) -> bool:
+        """
+        Returns whether the new position is a legal move
+        """
+        return False
+
+    def all_legal_moves(self) -> Set[Square]:
+        """
+        Returns only legal moves!
+        """
+        return set()
 
 
 class Knight(Piece):

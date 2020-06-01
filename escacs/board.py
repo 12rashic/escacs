@@ -82,3 +82,12 @@ class Board:
             if p == piece:
                 return square
         raise PieceNotFound(piece)
+
+    def place_piece(self, piece: Piece, pos: Coordinate):
+        """
+        Positions a piece in the board
+        """
+        sq: Square = get_square(pos)
+        piece.board = self
+        piece.pos = sq
+        self[sq] = piece

@@ -1,6 +1,7 @@
 from escacs.board import Board
 from escacs.board import Square
 from escacs.exceptions import InvalidSquare
+from escacs.pieces import Pawn
 from unittest.mock import Mock
 
 import pytest
@@ -27,6 +28,16 @@ class TestBoard(unittest.TestCase):
         foo = Mock()
         b["a1"] = foo
         self.assertIs(b["a1"], foo)
+
+    def test_place_piece(self):
+        b1 = self._makeOne()
+        b2 = self._makeOne()
+        pawn = Pawn("white")
+        sq = Square("a2")
+        b1.place_piece(pawn, "a2")
+        self.assertIs(pawn.board, b1)
+        self.assertEqual(pawn.pos, sq)
+        self.assertIs(b1[sq], pawn)
 
 
 class TestSquare_from_string(unittest.TestCase):
