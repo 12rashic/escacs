@@ -16,6 +16,20 @@ from typing import Tuple
 
 
 class Game:
+    """
+    Represents the chess game.
+
+    Attributes
+    ----------
+    _turn: Color
+        states which player is next in the current moment.
+    moves: list
+        history of moves already realized in the game.
+    board: Board
+        object of the class Board.
+
+    """
+
     def __init__(self):
         self.start()
 

@@ -17,6 +17,23 @@ class Piece(metaclass=ABCMeta):
     other pieces of the game.
 
     Also keeps a pointer of its current position/square in the board.
+
+    Attributes
+    ----------
+    color: Color
+        states the color of the piece.
+    board: Board
+        object of the class Board.
+    pos: Square
+        object of the class Square.
+    _deltas: list
+        list of tuples which represent the sense of the directions in
+        which the piece can move. Not always used. See Pawn, Knight
+        and King pieces.
+    abbr: str
+        Abbreviation of the piece.
+    points: int
+        Points of the piece.
     """
 
     # Used to compute all possible moves per piece
@@ -78,6 +95,17 @@ class Piece(metaclass=ABCMeta):
 
 
 class Pawn(Piece):
+    """Represents the pawn piece.
+
+    Attributes
+    ----------
+    direction: int
+        sense of the direction (always x = 0) of the pawn (1 or -1)
+    start_row: int
+        starting row of the pawn (1 or 6)
+
+    """
+
     abbr = "P"
     points = 1
 
@@ -106,6 +134,10 @@ class Pawn(Piece):
 
 
 class Knight(Piece):
+    """Represents the Knight piece.
+
+    """
+
     abbr = "N"
     points = 3
 
@@ -130,6 +162,10 @@ class Knight(Piece):
 
 
 class Bishop(Piece):
+    """Represents the Bishop piece.
+
+    """
+
     abbr = "B"
     points = 3
     _deltas = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
@@ -139,6 +175,10 @@ class Bishop(Piece):
 
 
 class Rook(Piece):
+    """Represents the Rook piece.
+
+    """
+
     abbr = "R"
     points = 5
     _deltas = [(0, 1), (0, -1), (1, 0), (-1, 0)]
@@ -148,6 +188,10 @@ class Rook(Piece):
 
 
 class Queen(Piece):
+    """Represents the Queen piece.
+
+    """
+
     abbr = "Q"
     points = 9
     _deltas = Rook._deltas + Bishop._deltas
@@ -157,6 +201,10 @@ class Queen(Piece):
 
 
 class King(Piece):
+    """Represents the King piece.
+
+    """
+
     abbr = "K"
 
     def all_moves(self) -> Set[Square]:

@@ -7,6 +7,14 @@ from typing import Union
 class Square:
     """This represents a board square. Translates from/to matrix
     coordinates and chess notation.
+
+    Attributes
+    ----------
+    row: int
+       number of the Square's row. row in {0, ..., 7}
+    col: int
+       number of the Square's column. col in {0, ..., 7}
+
     """
 
     def __init__(

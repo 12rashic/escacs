@@ -14,6 +14,13 @@ _none = object()
 class Board:
     """
     Stores the position of the pieces along the game.
+
+    Attributes
+    ----------
+    _board: dict
+        dictionary which has the squares of a chess board as keys and
+        the pieces of the chess as values.
+
     """
 
     def __init__(self):
