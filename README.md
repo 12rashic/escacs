@@ -1,4 +1,4 @@
-# Escacs
+# Escacs ![escacs](https://github.com/lferran/escacs/workflows/escacs/badge.svg?branch=master&event=push)
 
 Repo for chess fun
 
@@ -50,4 +50,10 @@ make develop
 
 # Run tests
 make tests
+```
+
+If you don't want to have `pre-commit` auto linting for you at every commit, you can git commit with the `--no-verify` flag or just uninstall pre-commit with:
+```shell
+venv/bin/pre-commit uninstall
+venv/bin/pip uninstall pre-commit
 ```
